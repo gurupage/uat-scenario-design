@@ -1,0 +1,34 @@
+{
+  "case_id": "F",
+  "data_type": "synthetic",
+  "description": "架空：変更仕様も過去例も未受領。ゼロ件で理由を示せるか。",
+  "sources": [
+    {
+      "id": "REQUEST-F",
+      "role": "context",
+      "entries": [
+        {
+          "id": "NOTE",
+          "text": "依頼内容は『今回の変更案件のUATシナリオを作ってほしい』のみ。機能や変更点は説明されていない。"
+        }
+      ]
+    }
+  ],
+  "missing": [
+    {
+      "id": "SPEC-F",
+      "role": "requirement",
+      "reason": "今回の変更資料未受領"
+    },
+    {
+      "id": "HISTORY-F",
+      "role": "history",
+      "reason": "過去シナリオ未受領"
+    },
+    {
+      "id": "MATRIX-F",
+      "role": "matrix",
+      "reason": "観点表未受領"
+    }
+  ]
+}

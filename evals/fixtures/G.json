@@ -1,0 +1,48 @@
+{
+  "case_id": "G",
+  "data_type": "synthetic",
+  "description": "架空：同じ版の適用仕様が矛盾。日付だけで片方を選べない。",
+  "sources": [
+    {
+      "id": "SPEC-G1",
+      "role": "requirement",
+      "entries": [
+        {
+          "id": "R1",
+          "text": "注文数量の上限は8に変更する。現行版v2と記載。"
+        }
+      ]
+    },
+    {
+      "id": "SPEC-G2",
+      "role": "requirement",
+      "entries": [
+        {
+          "id": "R1",
+          "text": "注文数量の上限は12に変更する。現行版v2と記載。SPEC-G1との優先関係は書かれていない。"
+        },
+        {
+          "id": "R2",
+          "text": "閲覧担当には数量の編集操作を提供しない。"
+        }
+      ]
+    },
+    {
+      "id": "MATRIX-G",
+      "role": "matrix",
+      "entries": [
+        {
+          "id": "M1",
+          "text": "UATで数量の上限と閲覧担当の編集可否を確認する。"
+        }
+      ]
+    }
+  ],
+  "missing": [
+    {
+      "id": "HISTORY-G",
+      "role": "history",
+      "reason": "過去シナリオ未受領"
+    }
+  ]
+}

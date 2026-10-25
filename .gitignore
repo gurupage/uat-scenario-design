@@ -1,0 +1,11 @@
+node_modules/
+.test-work/
+.npm-cache/
+.validation-deps/
+__pycache__/
+private/
+runs/
+dist/
+.env
+.env.*
+*.log

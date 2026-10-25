@@ -1,0 +1,172 @@
+{
+  "case_id": "B",
+  "skill_version": "0.3",
+  "data_type": "synthetic",
+  "source_inventory": [
+    {
+      "id": "SPEC-B",
+      "role": "requirement",
+      "status": "read",
+      "note": "架空fixtureの全項目を参照。実資料ではない。"
+    },
+    {
+      "id": "MATRIX-B",
+      "role": "matrix",
+      "status": "missing",
+      "note": "観点表未受領"
+    },
+    {
+      "id": "HISTORY-B",
+      "role": "history",
+      "status": "missing",
+      "note": "過去シナリオ未受領"
+    }
+  ],
+  "analysis": {
+    "scope": [
+      "観点表と過去シナリオは未受領。現場UATの範囲は仮置きで、変更資料に明記された確認だけを作る。"
+    ],
+    "changes": [
+      "SPEC-B#R1は上限引上げだが新上限・下限・超過等の動作が不明。境界値や期待結果を確定できない。",
+      "SPEC-B#R2は閲覧担当の編集不可が明記されている。"
+    ],
+    "viewpoints": [
+      "上限前後の条件は値が決まるまで保留。閲覧担当の確認は入力不足と独立して作成。"
+    ],
+    "history_use": [
+      "過去シナリオ未受領。既存の現場運用を推定したり他の架空ケースの上限10を持ち込まない。"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "B-01",
+      "title": "数量上限変更の境界確認（保留）",
+      "priority": "high",
+      "priority_reason": "上限変更そのものの合否判定に必要。",
+      "status": "pending",
+      "preconditions": [
+        "新しい許容範囲と変更可能な利用者を確認する必要がある。"
+      ],
+      "steps": [
+        "上限等が確定した後、境界内外の値を選び保存操作を設計する。"
+      ],
+      "expected": null,
+      "observation": null,
+      "requirement_refs": [
+        "SPEC-B#R1"
+      ],
+      "source_refs": [
+        "SPEC-B#R1"
+      ],
+      "question_ids": [
+        "B-Q1"
+      ],
+      "objective": "上限変更の許容/不許可境界を確認するための未確定事項を示す。",
+      "test_data": {
+        "new_upper_limit": null
+      },
+      "expectation_refs": []
+    },
+    {
+      "id": "B-02",
+      "title": "閲覧担当の編集操作がないことを確認",
+      "priority": "high",
+      "priority_reason": "資料で確定した権限ルールを確認する。",
+      "status": "ready",
+      "preconditions": [
+        "閲覧担当でログイン。既存注文を用意し、その数量を記録する。"
+      ],
+      "steps": [
+        "既存注文を参照する。",
+        "数量を編集する操作が提供されていないことを確認する。"
+      ],
+      "expected": "注文を参照でき、数量の編集操作は提供されない。",
+      "observation": "注文詳細の参照可否と編集操作の有無。",
+      "requirement_refs": [
+        "SPEC-B#R2"
+      ],
+      "source_refs": [
+        "SPEC-B#R2"
+      ],
+      "question_ids": [],
+      "objective": "閲覧担当が編集操作を使えないことを確認する。",
+      "test_data": {
+        "role": "閲覧担当"
+      },
+      "expectation_refs": [
+        "SPEC-B#R2"
+      ]
+    }
+  ],
+  "coverage": [
+    {
+      "requirement_ref": "SPEC-B#R1",
+      "disposition": "pending",
+      "scenario_ids": [
+        "B-01"
+      ],
+      "question_ids": [
+        "B-Q1"
+      ],
+      "reason": "確定不能な期待結果は保留。",
+      "conditions": [
+        {
+          "label": "上限・下限と境界外/未入力の動作",
+          "disposition": "pending",
+          "scenario_ids": [
+            "B-01"
+          ],
+          "question_ids": [
+            "B-Q1"
+          ],
+          "reason": "値と期待動作が未確定。"
+        }
+      ]
+    },
+    {
+      "requirement_ref": "SPEC-B#R2",
+      "disposition": "covered",
+      "scenario_ids": [
+        "B-02"
+      ],
+      "question_ids": [],
+      "reason": "確定部分を作成。",
+      "conditions": [
+        {
+          "label": "閲覧でき編集操作なし",
+          "disposition": "covered",
+          "scenario_ids": [
+            "B-02"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "B-Q1",
+      "question": "新しい上限・下限と、範囲外/小数/未入力時の期待動作が分かる現行資料を確認したい。",
+      "impact": "数量境界の値と合否判定を確定できない。",
+      "source_refs": [
+        "SPEC-B#R1"
+      ]
+    },
+    {
+      "id": "B-Q2",
+      "question": "工程別観点表のUAT欄と過去シナリオが入手できたら、今回の確認範囲に適用できるか照合する。",
+      "impact": "現場固有の範囲・粒度への適合は未評価。確定部分の叩き台作成は継続できる。",
+      "source_refs": [
+        "SPEC-B#R1",
+        "SPEC-B#R2"
+      ]
+    }
+  ],
+  "review": {
+    "status": "self_reviewed",
+    "limitations": [
+      "構造検査用の架空サンプル。業務上の正解や実案件での品質評価を表すものではない。"
+    ]
+  }
+}

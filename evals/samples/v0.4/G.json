@@ -1,0 +1,198 @@
+{
+  "case_id": "G",
+  "skill_version": "0.4",
+  "data_type": "synthetic",
+  "source_inventory": [
+    {
+      "id": "SPEC-G1",
+      "role": "requirement",
+      "status": "read",
+      "note": "架空fixtureの内容を参照。実資料ではない。"
+    },
+    {
+      "id": "SPEC-G2",
+      "role": "requirement",
+      "status": "read",
+      "note": "架空fixtureの内容を参照。実資料ではない。"
+    },
+    {
+      "id": "MATRIX-G",
+      "role": "matrix",
+      "status": "read",
+      "note": "架空fixtureの内容を参照。実資料ではない。"
+    },
+    {
+      "id": "HISTORY-G",
+      "role": "history",
+      "status": "missing",
+      "note": "過去シナリオ未受領"
+    }
+  ],
+  "analysis": {
+    "scope": [
+      "MATRIX-G#M1に従い上限と閲覧権限を対象にする。"
+    ],
+    "changes": [
+      "SPEC-G1#R1は上限8、SPEC-G2#R1は上限12。どちらも現行v2で優先関係がない。",
+      "SPEC-G2#R2の閲覧権限は矛盾の影響を受けず設計できる。"
+    ],
+    "viewpoints": [
+      "上限値を平均したり日付順で推測せず、競合する2要件を1つの保留シナリオと質問へ対応付ける。",
+      "閲覧権限は独立した確定部分として設計する。"
+    ],
+    "history_use": [
+      "過去シナリオ未受領。存在しない過去動作を根拠に優先版を決めない。"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "G-01",
+      "title": "数量上限の境界確認（仕様矛盾）",
+      "objective": "適用上限を確認してから境界値を設計する。",
+      "priority": "high",
+      "priority_reason": "変更の主要動作または業務データの保全を確認する。",
+      "status": "pending",
+      "preconditions": [
+        "G-Q1で適用する仕様を確定する。"
+      ],
+      "test_data": {
+        "upper_limit": null
+      },
+      "steps": [
+        "適用上限が確定後、その範囲内外の値と期待結果を設計する。"
+      ],
+      "expected": null,
+      "observation": null,
+      "requirement_refs": [
+        "SPEC-G1#R1",
+        "SPEC-G2#R1"
+      ],
+      "source_refs": [
+        "SPEC-G1#R1",
+        "SPEC-G2#R1",
+        "MATRIX-G#M1"
+      ],
+      "expectation_refs": [],
+      "question_ids": [
+        "G-Q1"
+      ]
+    },
+    {
+      "id": "G-02",
+      "title": "閲覧担当の編集不可",
+      "objective": "矛盾と無関係な権限制御を確認する。",
+      "priority": "high",
+      "priority_reason": "変更の主要動作または業務データの保全を確認する。",
+      "status": "ready",
+      "preconditions": [
+        "閲覧担当でログインし、既存注文を用意する。"
+      ],
+      "test_data": {
+        "role": "閲覧担当"
+      },
+      "steps": [
+        "対象注文を開き、数量編集操作が提供されていないことを確認する。"
+      ],
+      "expected": "閲覧担当には数量の編集操作が提供されない。",
+      "observation": "注文の編集操作の有無。",
+      "requirement_refs": [
+        "SPEC-G2#R2"
+      ],
+      "source_refs": [
+        "SPEC-G2#R2",
+        "MATRIX-G#M1"
+      ],
+      "expectation_refs": [
+        "SPEC-G2#R2"
+      ],
+      "question_ids": []
+    }
+  ],
+  "coverage": [
+    {
+      "requirement_ref": "SPEC-G1#R1",
+      "disposition": "pending",
+      "scenario_ids": [
+        "G-01"
+      ],
+      "question_ids": [
+        "G-Q1"
+      ],
+      "reason": "適用版の確認待ち。",
+      "conditions": [
+        {
+          "label": "上限8とする記載",
+          "disposition": "pending",
+          "scenario_ids": [
+            "G-01"
+          ],
+          "question_ids": [
+            "G-Q1"
+          ],
+          "reason": "同じ版の別資料と矛盾。"
+        }
+      ]
+    },
+    {
+      "requirement_ref": "SPEC-G2#R1",
+      "disposition": "pending",
+      "scenario_ids": [
+        "G-01"
+      ],
+      "question_ids": [
+        "G-Q1"
+      ],
+      "reason": "適用版の確認待ち。",
+      "conditions": [
+        {
+          "label": "上限12とする記載",
+          "disposition": "pending",
+          "scenario_ids": [
+            "G-01"
+          ],
+          "question_ids": [
+            "G-Q1"
+          ],
+          "reason": "同じ版の別資料と矛盾。"
+        }
+      ]
+    },
+    {
+      "requirement_ref": "SPEC-G2#R2",
+      "disposition": "covered",
+      "scenario_ids": [
+        "G-02"
+      ],
+      "question_ids": [],
+      "reason": "確定部分を設計。",
+      "conditions": [
+        {
+          "label": "閲覧担当の編集不可",
+          "disposition": "covered",
+          "scenario_ids": [
+            "G-02"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "G-Q1",
+      "question": "今回適用する数量上限は8か12か。両方に現行v2とあるため、適用版/正しい仕様を確認したい。",
+      "impact": "上限の許容/不許可条件と期待結果が確定しない。",
+      "source_refs": [
+        "SPEC-G1#R1",
+        "SPEC-G2#R1"
+      ]
+    }
+  ],
+  "review": {
+    "status": "self_reviewed",
+    "limitations": [
+      "構造検査用の架空サンプル。業務上の正解や実案件での品質評価を表すものではない。"
+    ]
+  }
+}

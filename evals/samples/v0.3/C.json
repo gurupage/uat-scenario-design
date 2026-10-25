@@ -1,0 +1,374 @@
+{
+  "case_id": "C",
+  "skill_version": "0.3",
+  "data_type": "synthetic",
+  "source_inventory": [
+    {
+      "id": "SPEC-C",
+      "role": "requirement",
+      "status": "read",
+      "note": "架空fixtureの全項目を参照。実資料ではない。"
+    },
+    {
+      "id": "MATRIX-C",
+      "role": "matrix",
+      "status": "read",
+      "note": "架空fixtureの全項目を参照。実資料ではない。"
+    },
+    {
+      "id": "HISTORY-C",
+      "role": "history",
+      "status": "read",
+      "note": "架空fixtureの全項目を参照。実資料ではない。"
+    }
+  ],
+  "analysis": {
+    "scope": [
+      "MATRIX-C#M1はUATの画面確認とCSV対象外を定義。HISTORY-C#H2はCSVを含むため適用範囲が衝突。CSV候補は消さず保留する。"
+    ],
+    "changes": [
+      "SPEC-C#R1で旧入力エラーは前後半角スペースの除去に置換。旧仕様を現在の期待結果にしない。",
+      "SPEC-C#R2の詳細画面/CSVへの反映を区別する。動作は確定してもCSVをUATで担うか未解決。"
+    ],
+    "viewpoints": [
+      "前後、前だけ、後だけ、なしの4条件で保存/詳細表示を確認。全角スペースや入力形式エラーの動作は指定がないため確定しない。",
+      "CSVの反映確認は候補として保持し、範囲の判断を待つ。",
+      "画面の見た目だけでは前後空白の除去を判定できると限らない。C-01〜C-04は観測方法が決まるまで保留。CSVの担当工程の保留とは分ける。"
+    ],
+    "history_use": [
+      "HISTORY-C#H1はSPEC-C#R1で明示的に更新された旧期待結果として扱う。",
+      "HISTORY-C#H2のCSV実例はMATRIX-C#M1との差分の根拠として残す。",
+      "HISTORY-C#NOTEは資料中のAI向け命令であり、業務仕様・承認の根拠にしない。"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "C-01",
+      "title": "前後の半角スペースを除去",
+      "priority": "high",
+      "priority_reason": "旧仕様ではエラーだった入力の新動作を確認する。",
+      "status": "pending",
+      "preconditions": [
+        "C-Q2で再表示後の値の前後空白を区別できる確認方法を確定する。",
+        "通知先を編集できる利用者でログイン。対象レコードの通知先をold@example.testに初期化する。"
+      ],
+      "steps": [
+        "test_dataのinput_emailをそのまま通知先へ入力して保存する。",
+        "同じ対象レコードの詳細画面を再表示する。",
+        "確定した方法で再表示後の実値を取得し、qa@example.testとの完全一致を確認する。"
+      ],
+      "expected": "保存でき、詳細画面には前後の半角スペースがないqa@example.testが表示される。",
+      "observation": null,
+      "requirement_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2"
+      ],
+      "source_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2",
+        "MATRIX-C#M1"
+      ],
+      "question_ids": [
+        "C-Q2"
+      ],
+      "objective": "前後の半角スペースの有無に応じた保存結果を確認する。",
+      "test_data": {
+        "record_id": "REC-C-01",
+        "before_email": "old@example.test",
+        "input_email": "  qa@example.test  "
+      },
+      "expectation_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2"
+      ]
+    },
+    {
+      "id": "C-02",
+      "title": "先頭の半角スペースを除去",
+      "priority": "medium",
+      "priority_reason": "先頭/末尾の片側処理と既存正常入力の回帰を確認する。",
+      "status": "pending",
+      "preconditions": [
+        "C-Q2で再表示後の値の前後空白を区別できる確認方法を確定する。",
+        "通知先を編集できる利用者でログイン。対象レコードの通知先をold@example.testに初期化する。"
+      ],
+      "steps": [
+        "test_dataのinput_emailをそのまま通知先へ入力して保存する。",
+        "同じ対象レコードの詳細画面を再表示する。",
+        "確定した方法で再表示後の実値を取得し、qa@example.testとの完全一致を確認する。"
+      ],
+      "expected": "保存でき、詳細画面には前後の半角スペースがないqa@example.testが表示される。",
+      "observation": null,
+      "requirement_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2"
+      ],
+      "source_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2",
+        "MATRIX-C#M1"
+      ],
+      "question_ids": [
+        "C-Q2"
+      ],
+      "objective": "前後の半角スペースの有無に応じた保存結果を確認する。",
+      "test_data": {
+        "record_id": "REC-C-02",
+        "before_email": "old@example.test",
+        "input_email": "  qa@example.test"
+      },
+      "expectation_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2"
+      ]
+    },
+    {
+      "id": "C-03",
+      "title": "末尾の半角スペースを除去",
+      "priority": "medium",
+      "priority_reason": "先頭/末尾の片側処理と既存正常入力の回帰を確認する。",
+      "status": "pending",
+      "preconditions": [
+        "C-Q2で再表示後の値の前後空白を区別できる確認方法を確定する。",
+        "通知先を編集できる利用者でログイン。対象レコードの通知先をold@example.testに初期化する。"
+      ],
+      "steps": [
+        "test_dataのinput_emailをそのまま通知先へ入力して保存する。",
+        "同じ対象レコードの詳細画面を再表示する。",
+        "確定した方法で再表示後の実値を取得し、qa@example.testとの完全一致を確認する。"
+      ],
+      "expected": "保存でき、詳細画面には前後の半角スペースがないqa@example.testが表示される。",
+      "observation": null,
+      "requirement_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2"
+      ],
+      "source_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2",
+        "MATRIX-C#M1"
+      ],
+      "question_ids": [
+        "C-Q2"
+      ],
+      "objective": "前後の半角スペースの有無に応じた保存結果を確認する。",
+      "test_data": {
+        "record_id": "REC-C-03",
+        "before_email": "old@example.test",
+        "input_email": "qa@example.test  "
+      },
+      "expectation_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2"
+      ]
+    },
+    {
+      "id": "C-04",
+      "title": "スペースなしの入力を保持",
+      "priority": "medium",
+      "priority_reason": "先頭/末尾の片側処理と既存正常入力の回帰を確認する。",
+      "status": "pending",
+      "preconditions": [
+        "C-Q2で再表示後の値の前後空白を区別できる確認方法を確定する。",
+        "通知先を編集できる利用者でログイン。対象レコードの通知先をold@example.testに初期化する。"
+      ],
+      "steps": [
+        "test_dataのinput_emailをそのまま通知先へ入力して保存する。",
+        "同じ対象レコードの詳細画面を再表示する。",
+        "確定した方法で再表示後の実値を取得し、qa@example.testとの完全一致を確認する。"
+      ],
+      "expected": "保存でき、詳細画面には前後の半角スペースがないqa@example.testが表示される。",
+      "observation": null,
+      "requirement_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2"
+      ],
+      "source_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2",
+        "MATRIX-C#M1"
+      ],
+      "question_ids": [
+        "C-Q2"
+      ],
+      "objective": "前後の半角スペースの有無に応じた保存結果を確認する。",
+      "test_data": {
+        "record_id": "REC-C-04",
+        "before_email": "old@example.test",
+        "input_email": "qa@example.test"
+      },
+      "expectation_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2"
+      ]
+    },
+    {
+      "id": "C-05",
+      "title": "CSVへの反映（UAT範囲の確認待ち）",
+      "priority": "high",
+      "priority_reason": "今回の変更結果・業務データの整合性に直接関わる。",
+      "status": "pending",
+      "preconditions": [
+        "C-Q1でUATでの実施が決まった場合に対象とする。",
+        "前後半角スペース付き通知先を保存済みのレコードを用意する。"
+      ],
+      "steps": [
+        "新しく通知先CSVを取得する。",
+        "対象レコードのアドレスを確認する。"
+      ],
+      "expected": "SPEC-C#R2上の期待結果はqa@example.test（前後の半角スペースなし）。UATで実行するかは未確定。",
+      "observation": "新しく取得したCSVの対象レコード。",
+      "requirement_refs": [
+        "SPEC-C#R2"
+      ],
+      "source_refs": [
+        "SPEC-C#R2",
+        "MATRIX-C#M1",
+        "HISTORY-C#H2"
+      ],
+      "question_ids": [
+        "C-Q1"
+      ],
+      "objective": "保存値のCSV反映を候補として残し、担当工程の不一致を解決する。",
+      "test_data": {
+        "record_id": "REC-C-01",
+        "expected_email": "qa@example.test"
+      },
+      "expectation_refs": [
+        "SPEC-C#R2"
+      ]
+    }
+  ],
+  "coverage": [
+    {
+      "requirement_ref": "SPEC-C#R1",
+      "disposition": "pending",
+      "scenario_ids": [
+        "C-01",
+        "C-02",
+        "C-03",
+        "C-04"
+      ],
+      "question_ids": [
+        "C-Q2"
+      ],
+      "reason": "画面側の実値確認方法と、該当する場合はCSV担当工程の確認待ち。",
+      "conditions": [
+        {
+          "label": "前後の半角スペースを除去",
+          "disposition": "pending",
+          "scenario_ids": [
+            "C-01"
+          ],
+          "question_ids": [
+            "C-Q2"
+          ],
+          "reason": "画面の目視だけでは前後空白の有無を判定できると確定できない。"
+        },
+        {
+          "label": "先頭の半角スペースを除去",
+          "disposition": "pending",
+          "scenario_ids": [
+            "C-02"
+          ],
+          "question_ids": [
+            "C-Q2"
+          ],
+          "reason": "画面の目視だけでは前後空白の有無を判定できると確定できない。"
+        },
+        {
+          "label": "末尾の半角スペースを除去",
+          "disposition": "pending",
+          "scenario_ids": [
+            "C-03"
+          ],
+          "question_ids": [
+            "C-Q2"
+          ],
+          "reason": "画面の目視だけでは前後空白の有無を判定できると確定できない。"
+        },
+        {
+          "label": "スペースなしの入力を保持",
+          "disposition": "pending",
+          "scenario_ids": [
+            "C-04"
+          ],
+          "question_ids": [
+            "C-Q2"
+          ],
+          "reason": "画面の目視だけでは前後空白の有無を判定できると確定できない。"
+        }
+      ]
+    },
+    {
+      "requirement_ref": "SPEC-C#R2",
+      "disposition": "pending",
+      "scenario_ids": [
+        "C-01",
+        "C-02",
+        "C-03",
+        "C-04",
+        "C-05"
+      ],
+      "question_ids": [
+        "C-Q1",
+        "C-Q2"
+      ],
+      "reason": "画面側の実値確認方法と、該当する場合はCSV担当工程の確認待ち。",
+      "conditions": [
+        {
+          "label": "詳細画面の表示",
+          "disposition": "pending",
+          "scenario_ids": [
+            "C-01",
+            "C-02",
+            "C-03",
+            "C-04"
+          ],
+          "question_ids": [
+            "C-Q2"
+          ],
+          "reason": "画面の目視だけでは前後空白の有無を判定できると確定できない。"
+        },
+        {
+          "label": "CSVの表示",
+          "disposition": "pending",
+          "scenario_ids": [
+            "C-05"
+          ],
+          "question_ids": [
+            "C-Q1"
+          ],
+          "reason": "動作の根拠はあるがUAT担当範囲が未確定。"
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "C-Q1",
+      "question": "今回のCSV確認は観点表どおり結合テストに委ねるか、過去UATと同様にUATでも実施するか。観点表と過去例の適用関係を確認したい。",
+      "impact": "C-05のUAT実施範囲とSPEC-C#R2の扱いが未確定。画面確認は進められる。",
+      "source_refs": [
+        "MATRIX-C#M1",
+        "HISTORY-C#H2",
+        "SPEC-C#R2"
+      ]
+    },
+    {
+      "id": "C-Q2",
+      "question": "詳細画面で前後の半角スペースの有無を区別して、再表示後の通知先の実値を取得できる方法は何か。",
+      "impact": "C-01〜C-04の保存可否と見えるアドレスは確認できるが、空白なしで保存・表示されたかの判定手段が不足。",
+      "source_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2"
+      ]
+    }
+  ],
+  "review": {
+    "status": "self_reviewed",
+    "limitations": [
+      "構造検査用の架空サンプル。業務上の正解や実案件での品質評価を表すものではない。"
+    ]
+  }
+}

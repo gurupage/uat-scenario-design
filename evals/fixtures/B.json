@@ -1,0 +1,33 @@
+{
+  "case_id": "B",
+  "data_type": "synthetic",
+  "description": "架空：入力不足。作成できる部分と保留を分ける。",
+  "sources": [
+    {
+      "id": "SPEC-B",
+      "role": "requirement",
+      "entries": [
+        {
+          "id": "R1",
+          "text": "注文数量の上限を引き上げる。新しい上限値、下限、未入力や超過時の動作はこの資料にない。"
+        },
+        {
+          "id": "R2",
+          "text": "閲覧担当は注文を参照できるが、数量の編集操作は提供しない。"
+        }
+      ]
+    }
+  ],
+  "missing": [
+    {
+      "id": "MATRIX-B",
+      "role": "matrix",
+      "reason": "観点表未受領"
+    },
+    {
+      "id": "HISTORY-B",
+      "role": "history",
+      "reason": "過去シナリオ未受領"
+    }
+  ]
+}

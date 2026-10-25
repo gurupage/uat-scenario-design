@@ -1,0 +1,63 @@
+{
+  "case_id": "F",
+  "skill_version": "0.4",
+  "data_type": "synthetic",
+  "source_inventory": [
+    {
+      "id": "REQUEST-F",
+      "role": "context",
+      "status": "read",
+      "note": "架空fixtureの内容を参照。実資料ではない。"
+    },
+    {
+      "id": "SPEC-F",
+      "role": "requirement",
+      "status": "missing",
+      "note": "今回の変更資料未受領"
+    },
+    {
+      "id": "HISTORY-F",
+      "role": "history",
+      "status": "missing",
+      "note": "過去シナリオ未受領"
+    },
+    {
+      "id": "MATRIX-F",
+      "role": "matrix",
+      "status": "missing",
+      "note": "観点表未受領"
+    }
+  ],
+  "analysis": {
+    "scope": [
+      "REQUEST-F#NOTEだけでは機能もUAT範囲も不明。対象を仮定してシナリオを作らない。"
+    ],
+    "changes": [
+      "今回の変更要件を抽出できない。"
+    ],
+    "viewpoints": [
+      "観点・期待結果を設計できる根拠がないため、シナリオ0件。これは確認漏れなしという意味ではない。"
+    ],
+    "history_use": [
+      "過去シナリオ未受領。現場ルール未確定。"
+    ]
+  },
+  "scenarios": [],
+  "coverage": [],
+  "questions": [
+    {
+      "id": "F-Q1",
+      "question": "対象機能・変更前後・期待動作が分かる案件資料が必要。利用可能なら過去UATと観点表もまとめて追加する。",
+      "impact": "シナリオの対象・条件・期待結果を設計できない。",
+      "source_refs": [
+        "REQUEST-F#NOTE"
+      ]
+    }
+  ],
+  "review": {
+    "status": "self_reviewed",
+    "limitations": [
+      "構造検査用の架空サンプル。業務上の正解や実案件での品質評価を表すものではない。"
+    ]
+  }
+}

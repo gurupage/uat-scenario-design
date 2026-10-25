@@ -1,0 +1,53 @@
+{
+  "case_id": "E",
+  "data_type": "synthetic",
+  "description": "架空：観点表はあるがUAT欄なし、過去資料1件が読めない。空文字と空白。",
+  "sources": [
+    {
+      "id": "SPEC-E",
+      "role": "requirement",
+      "entries": [
+        {
+          "id": "R1",
+          "text": "備考を編集できる担当者は空文字を保存できる。保存後の再表示では備考は空欄になる。"
+        },
+        {
+          "id": "R2",
+          "text": "半角スペース2文字の備考は、その2文字を保持して保存する。空文字と同一にしない。"
+        },
+        {
+          "id": "R3",
+          "text": "備考の保存後、対象レコードの識別コードは変わらない。"
+        }
+      ]
+    },
+    {
+      "id": "MATRIX-E",
+      "role": "matrix",
+      "entries": [
+        {
+          "id": "M1",
+          "text": "提供された表は単体テストと結合テストの項目だけで、UAT欄はない。"
+        }
+      ]
+    },
+    {
+      "id": "HISTORY-E1",
+      "role": "history",
+      "entries": [
+        {
+          "id": "H1",
+          "text": "過去の備考変更UAT：保存と再表示、対象レコードの識別コードを確認。"
+        }
+      ]
+    }
+  ],
+  "missing": [
+    {
+      "id": "HISTORY-E2",
+      "role": "history",
+      "status": "unreadable",
+      "reason": "原本の表が画像で文字を判読できないという架空条件。内容未読。"
+    }
+  ]
+}

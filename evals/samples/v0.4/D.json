@@ -1,0 +1,431 @@
+{
+  "case_id": "D",
+  "skill_version": "0.4",
+  "data_type": "synthetic",
+  "source_inventory": [
+    {
+      "id": "SPEC-D",
+      "role": "requirement",
+      "status": "read",
+      "note": "架空fixtureの内容を参照。実資料ではない。"
+    },
+    {
+      "id": "MATRIX-D",
+      "role": "matrix",
+      "status": "read",
+      "note": "架空fixtureの内容を参照。実資料ではない。"
+    },
+    {
+      "id": "HISTORY-D",
+      "role": "history",
+      "status": "read",
+      "note": "架空fixtureの内容を参照。実資料ではない。"
+    }
+  ],
+  "analysis": {
+    "scope": [
+      "MATRIX-D#M1に従い本人/他人×3状態、金額不変、管理画面の監査記録を対象にする。通知は要件未指定なので対象外。"
+    ],
+    "changes": [
+      "SPEC-D#R1：本人かつ承認待ちでのみ取下げ→取下げ済み、金額維持。",
+      "SPEC-D#R2：残る5組合せには操作を提供しない。",
+      "SPEC-D#R3：成功時の監査記録3項目を確認。日時や記録件数の厳密仕様は追加しない。"
+    ],
+    "viewpoints": [
+      "2者×3状態の6組合せをすべて設計し、許可される1組合せと拒否5組合せを分離する。",
+      "成功シナリオに状態・金額・新しい監査記録をまとめる。失敗操作の監査記録については仕様を創作しない。",
+      "ID・利用者ID・初期値は準備条件を示す例示であり、実在するデータの確認結果ではない。実環境では対応する準備済みデータへ置き換える。",
+      "他人の申請への参照権限は入力で確認できないためD-04〜D-06のみ保留。ID・金額・状態の例示データ準備とは区別する。"
+    ],
+    "history_use": [
+      "HISTORY-D#H1の状態と監査画面の照合を採用。過去例が1件のため、他案件にも普遍的なルールとはしない。"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "D-01",
+      "title": "本人の承認待ち申請を取り下げる",
+      "objective": "許可条件の取下げと状態・金額・監査記録の整合性を確認する。",
+      "priority": "high",
+      "priority_reason": "変更の主要動作または業務データの保全を確認する。",
+      "status": "ready",
+      "preconditions": [
+        "対象申請を承認待ち・金額1000で用意する。",
+        "本人でログインし、確認担当者が管理画面の監査記録を参照できる。"
+      ],
+      "test_data": {
+        "request_id": "REQ-D-01",
+        "applicant": "USER-D-01",
+        "operator": "USER-D-01",
+        "before_state": "承認待ち",
+        "amount": 1000
+      },
+      "steps": [
+        "操作前に対象申請のID・状態・金額と、既存の監査記録を記録する。",
+        "本人として対象申請を取り下げる。",
+        "申請を再表示して状態と金額を確認する。",
+        "操作前後の監査記録を照合し、今回追加された取下げの記録を確認する。"
+      ],
+      "expected": "状態が取下げ済み、金額は1000のまま。今回追加された監査記録にREQ-D-01、USER-D-01、取下げの操作種別がある。",
+      "observation": "申請一覧または詳細の状態・金額と、管理画面の新しい監査記録。",
+      "requirement_refs": [
+        "SPEC-D#R1",
+        "SPEC-D#R3"
+      ],
+      "source_refs": [
+        "SPEC-D#R1",
+        "SPEC-D#R3",
+        "MATRIX-D#M1",
+        "HISTORY-D#H1"
+      ],
+      "expectation_refs": [
+        "SPEC-D#R1",
+        "SPEC-D#R3"
+      ],
+      "question_ids": []
+    },
+    {
+      "id": "D-02",
+      "title": "本人の承認済み申請には取下げ操作なし",
+      "objective": "許可条件外の申請を取り下げられないことを確認する。",
+      "priority": "high",
+      "priority_reason": "不正な状態遷移または他人の申請操作を防ぐ重要な条件。",
+      "status": "ready",
+      "preconditions": [
+        "指定の申請をtest_dataの状態と金額で準備する。",
+        "指定操作者でログインし、対象申請を参照できるテストデータを使用する。"
+      ],
+      "test_data": {
+        "request_id": "REQ-D-02",
+        "applicant": "USER-D-01",
+        "operator": "USER-D-01",
+        "before_state": "承認済み",
+        "amount": 1000
+      },
+      "steps": [
+        "対象申請の状態を確認する。",
+        "取下げ操作が提供されていないことを確認する。",
+        "申請を再表示し状態が変化していないことを確認する。"
+      ],
+      "expected": "取下げ操作が提供されず、申請の状態は承認済みのまま。",
+      "observation": "対象申請の操作可否と再表示後の状態。",
+      "requirement_refs": [
+        "SPEC-D#R2"
+      ],
+      "source_refs": [
+        "SPEC-D#R2",
+        "MATRIX-D#M1"
+      ],
+      "expectation_refs": [
+        "SPEC-D#R2"
+      ],
+      "question_ids": []
+    },
+    {
+      "id": "D-03",
+      "title": "本人の取下げ済み申請には取下げ操作なし",
+      "objective": "許可条件外の申請を取り下げられないことを確認する。",
+      "priority": "medium",
+      "priority_reason": "実行済みの取下げ操作が再提供されないことの回帰確認。",
+      "status": "ready",
+      "preconditions": [
+        "指定の申請をtest_dataの状態と金額で準備する。",
+        "指定操作者でログインし、対象申請を参照できるテストデータを使用する。"
+      ],
+      "test_data": {
+        "request_id": "REQ-D-03",
+        "applicant": "USER-D-01",
+        "operator": "USER-D-01",
+        "before_state": "取下げ済み",
+        "amount": 1000
+      },
+      "steps": [
+        "対象申請の状態を確認する。",
+        "取下げ操作が提供されていないことを確認する。",
+        "申請を再表示し状態が変化していないことを確認する。"
+      ],
+      "expected": "取下げ操作が提供されず、申請の状態は取下げ済みのまま。",
+      "observation": "対象申請の操作可否と再表示後の状態。",
+      "requirement_refs": [
+        "SPEC-D#R2"
+      ],
+      "source_refs": [
+        "SPEC-D#R2",
+        "MATRIX-D#M1"
+      ],
+      "expectation_refs": [
+        "SPEC-D#R2"
+      ],
+      "question_ids": []
+    },
+    {
+      "id": "D-04",
+      "title": "他人の承認待ち申請には取下げ操作なし",
+      "objective": "許可条件外の申請を取り下げられないことを確認する。",
+      "priority": "high",
+      "priority_reason": "不正な状態遷移または他人の申請操作を防ぐ重要な条件。",
+      "status": "pending",
+      "preconditions": [
+        "指定の申請をtest_dataの状態と金額で準備する。",
+        "D-Q1で他人の申請を参照できる役割・画面への到達経路を確認する。参照可能性を例示データの準備だけで成立済みとみなさない。"
+      ],
+      "test_data": {
+        "request_id": "REQ-D-04",
+        "applicant": "USER-D-01",
+        "operator": "USER-D-02",
+        "before_state": "承認待ち",
+        "amount": 1000
+      },
+      "steps": [
+        "対象申請の状態を確認する。",
+        "取下げ操作が提供されていないことを確認する。",
+        "申請を再表示し状態が変化していないことを確認する。"
+      ],
+      "expected": "取下げ操作が提供されず、申請の状態は承認待ちのまま。",
+      "observation": null,
+      "requirement_refs": [
+        "SPEC-D#R2"
+      ],
+      "source_refs": [
+        "SPEC-D#R2",
+        "MATRIX-D#M1"
+      ],
+      "expectation_refs": [
+        "SPEC-D#R2"
+      ],
+      "question_ids": [
+        "D-Q1"
+      ]
+    },
+    {
+      "id": "D-05",
+      "title": "他人の承認済み申請には取下げ操作なし",
+      "objective": "許可条件外の申請を取り下げられないことを確認する。",
+      "priority": "high",
+      "priority_reason": "不正な状態遷移または他人の申請操作を防ぐ重要な条件。",
+      "status": "pending",
+      "preconditions": [
+        "指定の申請をtest_dataの状態と金額で準備する。",
+        "D-Q1で他人の申請を参照できる役割・画面への到達経路を確認する。参照可能性を例示データの準備だけで成立済みとみなさない。"
+      ],
+      "test_data": {
+        "request_id": "REQ-D-05",
+        "applicant": "USER-D-01",
+        "operator": "USER-D-02",
+        "before_state": "承認済み",
+        "amount": 1000
+      },
+      "steps": [
+        "対象申請の状態を確認する。",
+        "取下げ操作が提供されていないことを確認する。",
+        "申請を再表示し状態が変化していないことを確認する。"
+      ],
+      "expected": "取下げ操作が提供されず、申請の状態は承認済みのまま。",
+      "observation": null,
+      "requirement_refs": [
+        "SPEC-D#R2"
+      ],
+      "source_refs": [
+        "SPEC-D#R2",
+        "MATRIX-D#M1"
+      ],
+      "expectation_refs": [
+        "SPEC-D#R2"
+      ],
+      "question_ids": [
+        "D-Q1"
+      ]
+    },
+    {
+      "id": "D-06",
+      "title": "他人の取下げ済み申請には取下げ操作なし",
+      "objective": "許可条件外の申請を取り下げられないことを確認する。",
+      "priority": "high",
+      "priority_reason": "不正な状態遷移または他人の申請操作を防ぐ重要な条件。",
+      "status": "pending",
+      "preconditions": [
+        "指定の申請をtest_dataの状態と金額で準備する。",
+        "D-Q1で他人の申請を参照できる役割・画面への到達経路を確認する。参照可能性を例示データの準備だけで成立済みとみなさない。"
+      ],
+      "test_data": {
+        "request_id": "REQ-D-06",
+        "applicant": "USER-D-01",
+        "operator": "USER-D-02",
+        "before_state": "取下げ済み",
+        "amount": 1000
+      },
+      "steps": [
+        "対象申請の状態を確認する。",
+        "取下げ操作が提供されていないことを確認する。",
+        "申請を再表示し状態が変化していないことを確認する。"
+      ],
+      "expected": "取下げ操作が提供されず、申請の状態は取下げ済みのまま。",
+      "observation": null,
+      "requirement_refs": [
+        "SPEC-D#R2"
+      ],
+      "source_refs": [
+        "SPEC-D#R2",
+        "MATRIX-D#M1"
+      ],
+      "expectation_refs": [
+        "SPEC-D#R2"
+      ],
+      "question_ids": [
+        "D-Q1"
+      ]
+    }
+  ],
+  "coverage": [
+    {
+      "requirement_ref": "SPEC-D#R1",
+      "disposition": "covered",
+      "scenario_ids": [
+        "D-01"
+      ],
+      "question_ids": [],
+      "reason": "許可条件と更新結果を確認。",
+      "conditions": [
+        {
+          "label": "本人かつ承認待ちで成功",
+          "disposition": "covered",
+          "scenario_ids": [
+            "D-01"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "状態は取下げ済みへ",
+          "disposition": "covered",
+          "scenario_ids": [
+            "D-01"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "金額は不変",
+          "disposition": "covered",
+          "scenario_ids": [
+            "D-01"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        }
+      ]
+    },
+    {
+      "requirement_ref": "SPEC-D#R2",
+      "disposition": "pending",
+      "scenario_ids": [
+        "D-02",
+        "D-03",
+        "D-04",
+        "D-05",
+        "D-06"
+      ],
+      "question_ids": [
+        "D-Q1"
+      ],
+      "reason": "本人の2条件は設計済み。他人の3条件は参照可否・到達経路の確認待ち。",
+      "conditions": [
+        {
+          "label": "本人の承認済み申請には取下げ操作なし",
+          "disposition": "covered",
+          "scenario_ids": [
+            "D-02"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "本人の取下げ済み申請には取下げ操作なし",
+          "disposition": "covered",
+          "scenario_ids": [
+            "D-03"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "他人の承認待ち申請には取下げ操作なし",
+          "disposition": "pending",
+          "scenario_ids": [
+            "D-04"
+          ],
+          "question_ids": [
+            "D-Q1"
+          ],
+          "reason": "取下げ禁止の期待結果は確定しているが、他人の申請の参照可否・到達経路が未確認。"
+        },
+        {
+          "label": "他人の承認済み申請には取下げ操作なし",
+          "disposition": "pending",
+          "scenario_ids": [
+            "D-05"
+          ],
+          "question_ids": [
+            "D-Q1"
+          ],
+          "reason": "取下げ禁止の期待結果は確定しているが、他人の申請の参照可否・到達経路が未確認。"
+        },
+        {
+          "label": "他人の取下げ済み申請には取下げ操作なし",
+          "disposition": "pending",
+          "scenario_ids": [
+            "D-06"
+          ],
+          "question_ids": [
+            "D-Q1"
+          ],
+          "reason": "取下げ禁止の期待結果は確定しているが、他人の申請の参照可否・到達経路が未確認。"
+        }
+      ]
+    },
+    {
+      "requirement_ref": "SPEC-D#R3",
+      "disposition": "covered",
+      "scenario_ids": [
+        "D-01"
+      ],
+      "question_ids": [],
+      "reason": "規定済みの記録を確認し、未指定通知を作り込まない。",
+      "conditions": [
+        {
+          "label": "成功時の監査3項目",
+          "disposition": "covered",
+          "scenario_ids": [
+            "D-01"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "未指定の通知",
+          "disposition": "excluded",
+          "scenario_ids": [],
+          "question_ids": [],
+          "reason": "SPEC-D#R3で未指定、MATRIX-D#M1も要件明示時のみ対象としている。"
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "D-Q1",
+      "question": "他人の申請（承認待ち/承認済み/取下げ済み）を参照できる利用者の役割と画面への到達経路は何か。参照自体ができない仕様なら、その制約も確認したい。",
+      "impact": "D-04〜D-06の期待結果は確定しているが、操作可否を観測するための到達方法が未確定。本人のD-01〜D-03は独立して設計済み。",
+      "source_refs": [
+        "SPEC-D#R2",
+        "MATRIX-D#M1"
+      ]
+    }
+  ],
+  "review": {
+    "status": "self_reviewed",
+    "limitations": [
+      "構造検査用の架空サンプル。業務上の正解や実案件での品質評価を表すものではない。"
+    ]
+  }
+}

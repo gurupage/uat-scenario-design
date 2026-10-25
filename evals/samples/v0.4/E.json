@@ -1,0 +1,273 @@
+{
+  "case_id": "E",
+  "skill_version": "0.4",
+  "data_type": "synthetic",
+  "source_inventory": [
+    {
+      "id": "SPEC-E",
+      "role": "requirement",
+      "status": "read",
+      "note": "架空fixtureの内容を参照。実資料ではない。"
+    },
+    {
+      "id": "MATRIX-E",
+      "role": "matrix",
+      "status": "read",
+      "note": "表は読めたがUAT欄なし。未受領ではない。"
+    },
+    {
+      "id": "HISTORY-E1",
+      "role": "history",
+      "status": "read",
+      "note": "架空fixtureの内容を参照。実資料ではない。"
+    },
+    {
+      "id": "HISTORY-E2",
+      "role": "history",
+      "status": "unreadable",
+      "note": "原本の表が画像で文字を判読できないという架空条件。内容未読。"
+    }
+  ],
+  "analysis": {
+    "scope": [
+      "MATRIX-Eは読めたがUAT欄がない。HISTORY-E1と今回仕様をもとに暫定範囲を設定。HISTORY-E2は判読不能で参照済みにしない。"
+    ],
+    "changes": [
+      "SPEC-E#R1は空文字保存後の空欄表示、R2は半角スペース2文字の保存維持。両者を区別する。",
+      "SPEC-E#R3で対象コードが不変であることを確認。"
+    ],
+    "viewpoints": [
+      "空文字は表示を確認できる。スペース2文字の保存を空欄の目視だけで判定すると、空文字への変換を見逃す。",
+      "保存後の実値を取得する方法が入力にないため、スペース保持ケースは確認方法が決まるまで保留。",
+      "ID・利用者ID・初期値は準備条件を示す例示であり、実在するデータの確認結果ではない。実環境では対応する準備済みデータへ置き換える。",
+      "E-03へ保存受付と識別コード維持を分離。備考の厳密な実値確認ができなくてもコード比較は可能。E-02の空白保持は引き続き保留。"
+    ],
+    "history_use": [
+      "HISTORY-E1の保存/再表示と識別コード確認を採用。HISTORY-E2の内容は未読。現場全体の範囲は確定しない。"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "E-01",
+      "title": "備考を空文字にして再表示",
+      "objective": "空文字の保存と対象コードの不変を確認する。",
+      "priority": "high",
+      "priority_reason": "変更の主要動作または業務データの保全を確認する。",
+      "status": "ready",
+      "preconditions": [
+        "備考を編集できる担当者でログイン。指定コードと変更前備考のレコードを用意する。"
+      ],
+      "test_data": {
+        "record_id": "REC-E-01",
+        "before_note": "変更前メモ",
+        "input_note": "",
+        "before_code": "CODE-E-01"
+      },
+      "steps": [
+        "対象レコードの識別コードを記録する。",
+        "備考をすべて削除して保存する。",
+        "同じレコードを再表示する。"
+      ],
+      "expected": "保存でき、備考は空欄になる。識別コードはCODE-E-01のまま。",
+      "observation": "同じレコードの備考表示と識別コード。",
+      "requirement_refs": [
+        "SPEC-E#R1",
+        "SPEC-E#R3"
+      ],
+      "source_refs": [
+        "SPEC-E#R1",
+        "SPEC-E#R3",
+        "HISTORY-E1#H1"
+      ],
+      "expectation_refs": [
+        "SPEC-E#R1",
+        "SPEC-E#R3"
+      ],
+      "question_ids": []
+    },
+    {
+      "id": "E-02",
+      "title": "半角スペース2文字を保持（観測方法確認待ち）",
+      "objective": "空文字への意図しない変換がないことを確認する。",
+      "priority": "high",
+      "priority_reason": "変更の主要動作または業務データの保全を確認する。",
+      "status": "pending",
+      "preconditions": [
+        "E-Q2で保存後の実値の取得方法を確定する。",
+        "備考を編集できる担当者と対象レコードを用意する。"
+      ],
+      "test_data": {
+        "record_id": "REC-E-02",
+        "before_note": "変更前メモ",
+        "input_note": "  "
+      },
+      "steps": [
+        "備考へ半角スペース2文字を入力して保存する。",
+        "確定した方法で保存後の実値を取得し、2文字ともU+0020であることを確認する。"
+      ],
+      "expected": "保存後の備考は半角スペース2文字であり、空文字ではない。",
+      "observation": null,
+      "requirement_refs": [
+        "SPEC-E#R2"
+      ],
+      "source_refs": [
+        "SPEC-E#R2"
+      ],
+      "expectation_refs": [
+        "SPEC-E#R2"
+      ],
+      "question_ids": [
+        "E-Q2"
+      ]
+    },
+    {
+      "id": "E-03",
+      "title": "スペース入力後の保存受付と識別コード維持",
+      "objective": "半角スペース2文字を入力して保存する操作で、対象レコードの識別コードが変わらないことを確認する。備考の実値保持はE-02へ分離する。",
+      "priority": "high",
+      "priority_reason": "変更の主要動作または業務データの保全を確認する。",
+      "status": "ready",
+      "preconditions": [
+        "備考を編集できる担当者でログイン。指定コードと変更前備考のレコードを用意する。"
+      ],
+      "test_data": {
+        "record_id": "REC-E-03",
+        "before_note": "変更前メモ",
+        "input_note": "  ",
+        "before_code": "CODE-E-03"
+      },
+      "steps": [
+        "対象レコードの変更前備考と識別コードを記録する。",
+        "備考を半角スペース2文字へ置き換えて保存し、同じレコードを再表示する。",
+        "変更前メモが表示されなくなり、識別コードが変更前の値を維持することを確認する。"
+      ],
+      "expected": "保存でき、変更前メモが表示されなくなる。識別コードはCODE-E-03のまま。このシナリオでは備考の空文字と半角スペース2文字を区別しない。",
+      "observation": "再表示した同じレコードの備考に変更前メモが残っていないことと、識別コードの変更前後比較。",
+      "requirement_refs": [
+        "SPEC-E#R2",
+        "SPEC-E#R3"
+      ],
+      "source_refs": [
+        "SPEC-E#R2",
+        "SPEC-E#R3",
+        "HISTORY-E1#H1"
+      ],
+      "expectation_refs": [
+        "SPEC-E#R2",
+        "SPEC-E#R3"
+      ],
+      "question_ids": []
+    }
+  ],
+  "coverage": [
+    {
+      "requirement_ref": "SPEC-E#R1",
+      "disposition": "covered",
+      "scenario_ids": [
+        "E-01"
+      ],
+      "question_ids": [],
+      "reason": "画面で確認できる内容を設計。",
+      "conditions": [
+        {
+          "label": "空文字の保存/再表示",
+          "disposition": "covered",
+          "scenario_ids": [
+            "E-01"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        }
+      ]
+    },
+    {
+      "requirement_ref": "SPEC-E#R2",
+      "disposition": "pending",
+      "scenario_ids": [
+        "E-03",
+        "E-02"
+      ],
+      "question_ids": [
+        "E-Q2"
+      ],
+      "reason": "期待動作は確定、実値の観測方法が未確定。",
+      "conditions": [
+        {
+          "label": "半角スペース2文字の入力を保存受付",
+          "disposition": "covered",
+          "scenario_ids": [
+            "E-03"
+          ],
+          "question_ids": [],
+          "reason": "独立に判定できる条件を設計。"
+        },
+        {
+          "label": "2文字の保存維持",
+          "disposition": "pending",
+          "scenario_ids": [
+            "E-02"
+          ],
+          "question_ids": [
+            "E-Q2"
+          ],
+          "reason": "観測方法未確定。"
+        }
+      ]
+    },
+    {
+      "requirement_ref": "SPEC-E#R3",
+      "disposition": "covered",
+      "scenario_ids": [
+        "E-01",
+        "E-03"
+      ],
+      "question_ids": [],
+      "reason": "空文字とスペース入力のいずれも、識別コードの維持は独立に確認可能。備考の実値保持はR2の保留として残す。",
+      "conditions": [
+        {
+          "label": "空文字保存時のコード維持",
+          "disposition": "covered",
+          "scenario_ids": [
+            "E-01"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "スペース入力を保存したときのコード維持",
+          "disposition": "covered",
+          "scenario_ids": [
+            "E-03"
+          ],
+          "question_ids": [],
+          "reason": "備考の実値を取得せず、表示される識別コードを独立に比較できる。"
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "E-Q1",
+      "question": "判読できる過去シナリオとUAT範囲が分かる資料を追加できたら照合する。",
+      "impact": "現場の範囲・粒度の妥当性は未確認。確定部分の作成を止めない。",
+      "source_refs": [
+        "MATRIX-E#M1",
+        "HISTORY-E1#H1"
+      ]
+    },
+    {
+      "id": "E-Q2",
+      "question": "保存後の備考の実値を、空文字と半角スペース2文字を区別して取得できる確認方法は何か。",
+      "impact": "空欄の目視だけではSPEC-E#R2の合否を判定できない。E-02の実行準備が未完了。",
+      "source_refs": [
+        "SPEC-E#R2"
+      ]
+    }
+  ],
+  "review": {
+    "status": "self_reviewed",
+    "limitations": [
+      "構造検査用の架空サンプル。業務上の正解や実案件での品質評価を表すものではない。"
+    ]
+  }
+}

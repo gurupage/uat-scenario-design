@@ -1,0 +1,719 @@
+{
+  "case_id": "A",
+  "skill_version": "0.3",
+  "data_type": "synthetic",
+  "source_inventory": [
+    {
+      "id": "SPEC-A",
+      "role": "requirement",
+      "status": "read",
+      "note": "架空fixtureの全項目を参照。実資料ではない。"
+    },
+    {
+      "id": "MATRIX-A",
+      "role": "matrix",
+      "status": "read",
+      "note": "架空fixtureの全項目を参照。実資料ではない。"
+    },
+    {
+      "id": "HISTORY-A1",
+      "role": "history",
+      "status": "read",
+      "note": "架空fixtureの全項目を参照。実資料ではない。"
+    },
+    {
+      "id": "HISTORY-A2",
+      "role": "history",
+      "status": "read",
+      "note": "架空fixtureの全項目を参照。実資料ではない。"
+    }
+  ],
+  "analysis": {
+    "scope": [
+      "MATRIX-A#M1により境界・権限・CSVもUATに含める。一般的なUAT論で除外しない。応答時間測定は別工程と明記されているので今回対象外。"
+    ],
+    "changes": [
+      "SPEC-A#R1：上限5から10へ。旧上限付近5/6と新上限付近9/10/11、下限1/0を確認。",
+      "SPEC-A#R2：小数と未入力は不許可、エラー時に既存値を保持。文言の完全一致は要求しない。",
+      "SPEC-A#R3/R4：役割と保存後の画面/CSVも関連する。"
+    ],
+    "viewpoints": [
+      "1,5,6,9,10：保存と業務データ反映。0,11,1.5,未入力：保存拒否と既存データ保持。",
+      "閲覧担当の操作不可。無関係なAPI直接攻撃・負荷・リトライ仕様は追加しない。",
+      "CSVは1,5,6,9,10の5つの別注文を準備して1回の取得で全行を照合し、確認条件を維持して取得の重複だけを減らす。",
+      "優先度は新しく許可される6と新上限10/超過11・権限を高、既存下限/旧上限や補助条件を中とするAI案。"
+    ],
+    "history_use": [
+      "HISTORY-A1#H1の数量6がエラーという旧期待結果はSPEC-A#R1で置換。5/6を回帰境界として再設計。",
+      "HISTORY-A1#H2とHISTORY-A2#H1の両方からCSVと再表示の確認を採用。未入力はSPEC-A#R2にも根拠あり。"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "A-01",
+      "title": "数量1を保存して再表示で確認",
+      "priority": "medium",
+      "priority_reason": "既存範囲または境界隣接値の回帰確認。新規許容範囲の成立に続いて確認する。",
+      "status": "ready",
+      "preconditions": [
+        "営業担当でログイン。test_dataの注文を編集できること。",
+        "各注文を数量2で用意し、後続のA-11が終わるまで削除・再編集しない。"
+      ],
+      "steps": [
+        "指定の注文の数量を1へ変更して保存する。",
+        "同じ注文の詳細を再表示する。"
+      ],
+      "expected": "保存でき、再表示した注文詳細の数量が1になる。",
+      "observation": "指定注文IDの注文詳細の数量欄。",
+      "requirement_refs": [
+        "SPEC-A#R1",
+        "SPEC-A#R3",
+        "SPEC-A#R4"
+      ],
+      "source_refs": [
+        "SPEC-A#R1",
+        "SPEC-A#R3",
+        "SPEC-A#R4",
+        "MATRIX-A#M1",
+        "HISTORY-A1#H2",
+        "HISTORY-A2#H1"
+      ],
+      "question_ids": [],
+      "objective": "数量1が今回の許容範囲として保存され、再表示でも維持されることを確認する。",
+      "test_data": {
+        "order_id": "ORDER-A-01",
+        "quantity_before": 2,
+        "quantity_input": 1,
+        "role": "営業担当"
+      },
+      "expectation_refs": [
+        "SPEC-A#R1",
+        "SPEC-A#R3",
+        "SPEC-A#R4"
+      ]
+    },
+    {
+      "id": "A-02",
+      "title": "数量5を保存して再表示で確認",
+      "priority": "medium",
+      "priority_reason": "既存範囲または境界隣接値の回帰確認。新規許容範囲の成立に続いて確認する。",
+      "status": "ready",
+      "preconditions": [
+        "営業担当でログイン。test_dataの注文を編集できること。",
+        "各注文を数量2で用意し、後続のA-11が終わるまで削除・再編集しない。"
+      ],
+      "steps": [
+        "指定の注文の数量を5へ変更して保存する。",
+        "同じ注文の詳細を再表示する。"
+      ],
+      "expected": "保存でき、再表示した注文詳細の数量が5になる。",
+      "observation": "指定注文IDの注文詳細の数量欄。",
+      "requirement_refs": [
+        "SPEC-A#R1",
+        "SPEC-A#R3",
+        "SPEC-A#R4"
+      ],
+      "source_refs": [
+        "SPEC-A#R1",
+        "SPEC-A#R3",
+        "SPEC-A#R4",
+        "MATRIX-A#M1",
+        "HISTORY-A1#H2",
+        "HISTORY-A2#H1"
+      ],
+      "question_ids": [],
+      "objective": "数量5が今回の許容範囲として保存され、再表示でも維持されることを確認する。",
+      "test_data": {
+        "order_id": "ORDER-A-02",
+        "quantity_before": 2,
+        "quantity_input": 5,
+        "role": "営業担当"
+      },
+      "expectation_refs": [
+        "SPEC-A#R1",
+        "SPEC-A#R3",
+        "SPEC-A#R4"
+      ]
+    },
+    {
+      "id": "A-03",
+      "title": "数量6を保存して再表示で確認",
+      "priority": "high",
+      "priority_reason": "今回新たに許可される数量または新上限の保存が変更の中心である。",
+      "status": "ready",
+      "preconditions": [
+        "営業担当でログイン。test_dataの注文を編集できること。",
+        "各注文を数量2で用意し、後続のA-11が終わるまで削除・再編集しない。"
+      ],
+      "steps": [
+        "指定の注文の数量を6へ変更して保存する。",
+        "同じ注文の詳細を再表示する。"
+      ],
+      "expected": "保存でき、再表示した注文詳細の数量が6になる。",
+      "observation": "指定注文IDの注文詳細の数量欄。",
+      "requirement_refs": [
+        "SPEC-A#R1",
+        "SPEC-A#R3",
+        "SPEC-A#R4"
+      ],
+      "source_refs": [
+        "SPEC-A#R1",
+        "SPEC-A#R3",
+        "SPEC-A#R4",
+        "MATRIX-A#M1",
+        "HISTORY-A1#H2",
+        "HISTORY-A2#H1"
+      ],
+      "question_ids": [],
+      "objective": "数量6が今回の許容範囲として保存され、再表示でも維持されることを確認する。",
+      "test_data": {
+        "order_id": "ORDER-A-03",
+        "quantity_before": 2,
+        "quantity_input": 6,
+        "role": "営業担当"
+      },
+      "expectation_refs": [
+        "SPEC-A#R1",
+        "SPEC-A#R3",
+        "SPEC-A#R4"
+      ]
+    },
+    {
+      "id": "A-04",
+      "title": "数量9を保存して再表示で確認",
+      "priority": "medium",
+      "priority_reason": "既存範囲または境界隣接値の回帰確認。新規許容範囲の成立に続いて確認する。",
+      "status": "ready",
+      "preconditions": [
+        "営業担当でログイン。test_dataの注文を編集できること。",
+        "各注文を数量2で用意し、後続のA-11が終わるまで削除・再編集しない。"
+      ],
+      "steps": [
+        "指定の注文の数量を9へ変更して保存する。",
+        "同じ注文の詳細を再表示する。"
+      ],
+      "expected": "保存でき、再表示した注文詳細の数量が9になる。",
+      "observation": "指定注文IDの注文詳細の数量欄。",
+      "requirement_refs": [
+        "SPEC-A#R1",
+        "SPEC-A#R3",
+        "SPEC-A#R4"
+      ],
+      "source_refs": [
+        "SPEC-A#R1",
+        "SPEC-A#R3",
+        "SPEC-A#R4",
+        "MATRIX-A#M1",
+        "HISTORY-A1#H2",
+        "HISTORY-A2#H1"
+      ],
+      "question_ids": [],
+      "objective": "数量9が今回の許容範囲として保存され、再表示でも維持されることを確認する。",
+      "test_data": {
+        "order_id": "ORDER-A-04",
+        "quantity_before": 2,
+        "quantity_input": 9,
+        "role": "営業担当"
+      },
+      "expectation_refs": [
+        "SPEC-A#R1",
+        "SPEC-A#R3",
+        "SPEC-A#R4"
+      ]
+    },
+    {
+      "id": "A-05",
+      "title": "数量10を保存して再表示で確認",
+      "priority": "high",
+      "priority_reason": "今回新たに許可される数量または新上限の保存が変更の中心である。",
+      "status": "ready",
+      "preconditions": [
+        "営業担当でログイン。test_dataの注文を編集できること。",
+        "各注文を数量2で用意し、後続のA-11が終わるまで削除・再編集しない。"
+      ],
+      "steps": [
+        "指定の注文の数量を10へ変更して保存する。",
+        "同じ注文の詳細を再表示する。"
+      ],
+      "expected": "保存でき、再表示した注文詳細の数量が10になる。",
+      "observation": "指定注文IDの注文詳細の数量欄。",
+      "requirement_refs": [
+        "SPEC-A#R1",
+        "SPEC-A#R3",
+        "SPEC-A#R4"
+      ],
+      "source_refs": [
+        "SPEC-A#R1",
+        "SPEC-A#R3",
+        "SPEC-A#R4",
+        "MATRIX-A#M1",
+        "HISTORY-A1#H2",
+        "HISTORY-A2#H1"
+      ],
+      "question_ids": [],
+      "objective": "数量10が今回の許容範囲として保存され、再表示でも維持されることを確認する。",
+      "test_data": {
+        "order_id": "ORDER-A-05",
+        "quantity_before": 2,
+        "quantity_input": 10,
+        "role": "営業担当"
+      },
+      "expectation_refs": [
+        "SPEC-A#R1",
+        "SPEC-A#R3",
+        "SPEC-A#R4"
+      ]
+    },
+    {
+      "id": "A-06",
+      "title": "数量0の保存を拒否し既存値を維持",
+      "priority": "medium",
+      "priority_reason": "今回の上限変更で既存の入力制御が壊れていないかを確認する。",
+      "status": "ready",
+      "preconditions": [
+        "営業担当でログイン。各実行前に対象注文の保存済み数量を2にする。"
+      ],
+      "steps": [
+        "数量欄に0を入力して保存を試す。",
+        "注文詳細を再表示して保存済みの数量を確認する。"
+      ],
+      "expected": "入力エラーになり保存されない。再表示した数量は2のままである。エラー文言そのものの一致は判定しない。",
+      "observation": "入力エラー表示と再表示後の数量欄。",
+      "requirement_refs": [
+        "SPEC-A#R2",
+        "SPEC-A#R3"
+      ],
+      "source_refs": [
+        "SPEC-A#R2",
+        "SPEC-A#R3",
+        "MATRIX-A#M1"
+      ],
+      "question_ids": [],
+      "objective": "許容しない入力で既存の注文数量を変更してしまわないことを確認する。",
+      "test_data": {
+        "order_id": "ORDER-A-06",
+        "quantity_before": 2,
+        "quantity_input": 0,
+        "role": "営業担当"
+      },
+      "expectation_refs": [
+        "SPEC-A#R2",
+        "SPEC-A#R3"
+      ]
+    },
+    {
+      "id": "A-07",
+      "title": "数量11の保存を拒否し既存値を維持",
+      "priority": "high",
+      "priority_reason": "新上限を超える数量の誤登録を防ぐ変更直結の確認。",
+      "status": "ready",
+      "preconditions": [
+        "営業担当でログイン。各実行前に対象注文の保存済み数量を2にする。"
+      ],
+      "steps": [
+        "数量欄に11を入力して保存を試す。",
+        "注文詳細を再表示して保存済みの数量を確認する。"
+      ],
+      "expected": "入力エラーになり保存されない。再表示した数量は2のままである。エラー文言そのものの一致は判定しない。",
+      "observation": "入力エラー表示と再表示後の数量欄。",
+      "requirement_refs": [
+        "SPEC-A#R2",
+        "SPEC-A#R3"
+      ],
+      "source_refs": [
+        "SPEC-A#R2",
+        "SPEC-A#R3",
+        "MATRIX-A#M1"
+      ],
+      "question_ids": [],
+      "objective": "許容しない入力で既存の注文数量を変更してしまわないことを確認する。",
+      "test_data": {
+        "order_id": "ORDER-A-07",
+        "quantity_before": 2,
+        "quantity_input": 11,
+        "role": "営業担当"
+      },
+      "expectation_refs": [
+        "SPEC-A#R2",
+        "SPEC-A#R3"
+      ]
+    },
+    {
+      "id": "A-08",
+      "title": "数量1.5の保存を拒否し既存値を維持",
+      "priority": "medium",
+      "priority_reason": "今回の上限変更で既存の入力制御が壊れていないかを確認する。",
+      "status": "ready",
+      "preconditions": [
+        "営業担当でログイン。各実行前に対象注文の保存済み数量を2にする。"
+      ],
+      "steps": [
+        "数量欄に1.5を入力して保存を試す。",
+        "注文詳細を再表示して保存済みの数量を確認する。"
+      ],
+      "expected": "入力エラーになり保存されない。再表示した数量は2のままである。エラー文言そのものの一致は判定しない。",
+      "observation": "入力エラー表示と再表示後の数量欄。",
+      "requirement_refs": [
+        "SPEC-A#R2",
+        "SPEC-A#R3"
+      ],
+      "source_refs": [
+        "SPEC-A#R2",
+        "SPEC-A#R3",
+        "MATRIX-A#M1"
+      ],
+      "question_ids": [],
+      "objective": "許容しない入力で既存の注文数量を変更してしまわないことを確認する。",
+      "test_data": {
+        "order_id": "ORDER-A-08",
+        "quantity_before": 2,
+        "quantity_input": 1.5,
+        "role": "営業担当"
+      },
+      "expectation_refs": [
+        "SPEC-A#R2",
+        "SPEC-A#R3"
+      ]
+    },
+    {
+      "id": "A-09",
+      "title": "数量未入力の保存を拒否し既存値を維持",
+      "priority": "medium",
+      "priority_reason": "今回の上限変更で既存の入力制御が壊れていないかを確認する。",
+      "status": "ready",
+      "preconditions": [
+        "営業担当でログイン。各実行前に対象注文の保存済み数量を2にする。"
+      ],
+      "steps": [
+        "数量欄を空にして保存を試す。",
+        "注文詳細を再表示して保存済みの数量を確認する。"
+      ],
+      "expected": "入力エラーになり保存されない。再表示した数量は2のままである。エラー文言そのものの一致は判定しない。",
+      "observation": "入力エラー表示と再表示後の数量欄。",
+      "requirement_refs": [
+        "SPEC-A#R2",
+        "SPEC-A#R3"
+      ],
+      "source_refs": [
+        "SPEC-A#R2",
+        "SPEC-A#R3",
+        "MATRIX-A#M1"
+      ],
+      "question_ids": [],
+      "objective": "許容しない入力で既存の注文数量を変更してしまわないことを確認する。",
+      "test_data": {
+        "order_id": "ORDER-A-09",
+        "quantity_before": 2,
+        "quantity_input": "",
+        "role": "営業担当"
+      },
+      "expectation_refs": [
+        "SPEC-A#R2",
+        "SPEC-A#R3"
+      ]
+    },
+    {
+      "id": "A-10",
+      "title": "閲覧担当には数量編集を提供しない",
+      "priority": "high",
+      "priority_reason": "権限のない担当者による数量変更を防ぐ。",
+      "status": "ready",
+      "preconditions": [
+        "閲覧担当でログイン。数量2の対象注文を用意する。"
+      ],
+      "steps": [
+        "対象注文の詳細を開く。",
+        "数量の編集操作が提供されていないことを確認し、再表示する。"
+      ],
+      "expected": "数量を変更する操作が提供されず、数量は2のままである。",
+      "observation": "注文詳細の編集操作の有無と数量。",
+      "requirement_refs": [
+        "SPEC-A#R3"
+      ],
+      "source_refs": [
+        "SPEC-A#R3",
+        "MATRIX-A#M1",
+        "HISTORY-A1#H2"
+      ],
+      "question_ids": [],
+      "objective": "閲覧担当が注文数量を編集できないことを確認する。",
+      "test_data": {
+        "order_id": "ORDER-A-10",
+        "quantity_before": 2,
+        "role": "閲覧担当"
+      },
+      "expectation_refs": [
+        "SPEC-A#R3"
+      ]
+    },
+    {
+      "id": "A-11",
+      "title": "保存した5注文の数量をCSVでまとめて照合",
+      "objective": "保存値と後続の受注CSVの値が各境界条件で一致することを確認する。",
+      "priority": "high",
+      "priority_reason": "後続業務へ誤数量を渡すリスクを確認する。",
+      "status": "ready",
+      "preconditions": [
+        "A-01～A-05の5つの別注文が保存成功していること。いずれか失敗した場合、その注文のCSV比較結果を合格にしない。",
+        "5注文のIDを識別でき、最新の受注CSVを取得できること。"
+      ],
+      "test_data": {
+        "expected_rows": "ORDER-A-01=1; ORDER-A-02=5; ORDER-A-03=6; ORDER-A-04=9; ORDER-A-05=10"
+      },
+      "steps": [
+        "5注文の保存後、新しく受注CSVを1回取得する。",
+        "注文IDごとに対象行を特定し、5行すべてをexpected_rowsと照合する。"
+      ],
+      "expected": "5つの注文がCSVに存在し、数量がそれぞれ1、5、6、9、10と一致する。1行でも不一致/欠落なら不合格。",
+      "observation": "CSVの注文ID列と数量列。各行の比較結果を個別に残す。",
+      "requirement_refs": [
+        "SPEC-A#R4"
+      ],
+      "source_refs": [
+        "SPEC-A#R4",
+        "MATRIX-A#M1",
+        "HISTORY-A1#H2",
+        "HISTORY-A2#H1"
+      ],
+      "expectation_refs": [
+        "SPEC-A#R4"
+      ],
+      "question_ids": []
+    }
+  ],
+  "coverage": [
+    {
+      "requirement_ref": "SPEC-A#R1",
+      "disposition": "covered",
+      "scenario_ids": [
+        "A-01",
+        "A-02",
+        "A-03",
+        "A-04",
+        "A-05"
+      ],
+      "question_ids": [],
+      "reason": "新旧の境界と新規許容範囲を確認。",
+      "conditions": [
+        {
+          "label": "数量1の保存",
+          "disposition": "covered",
+          "scenario_ids": [
+            "A-01"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "数量5の保存",
+          "disposition": "covered",
+          "scenario_ids": [
+            "A-02"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "数量6の保存",
+          "disposition": "covered",
+          "scenario_ids": [
+            "A-03"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "数量9の保存",
+          "disposition": "covered",
+          "scenario_ids": [
+            "A-04"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "数量10の保存",
+          "disposition": "covered",
+          "scenario_ids": [
+            "A-05"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        }
+      ]
+    },
+    {
+      "requirement_ref": "SPEC-A#R2",
+      "disposition": "covered",
+      "scenario_ids": [
+        "A-06",
+        "A-07",
+        "A-08",
+        "A-09"
+      ],
+      "question_ids": [],
+      "reason": "4つの不許可条件を別々に扱う。",
+      "conditions": [
+        {
+          "label": "数量0でエラー・既存値維持",
+          "disposition": "covered",
+          "scenario_ids": [
+            "A-06"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "数量11でエラー・既存値維持",
+          "disposition": "covered",
+          "scenario_ids": [
+            "A-07"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "数量1.5でエラー・既存値維持",
+          "disposition": "covered",
+          "scenario_ids": [
+            "A-08"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "数量空文字でエラー・既存値維持",
+          "disposition": "covered",
+          "scenario_ids": [
+            "A-09"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        }
+      ]
+    },
+    {
+      "requirement_ref": "SPEC-A#R3",
+      "disposition": "covered",
+      "scenario_ids": [
+        "A-01",
+        "A-02",
+        "A-03",
+        "A-04",
+        "A-05",
+        "A-06",
+        "A-07",
+        "A-08",
+        "A-09",
+        "A-10"
+      ],
+      "question_ids": [],
+      "reason": "正負の役割条件を確認。",
+      "conditions": [
+        {
+          "label": "営業担当で編集できる",
+          "disposition": "covered",
+          "scenario_ids": [
+            "A-01",
+            "A-02",
+            "A-03",
+            "A-04",
+            "A-05",
+            "A-06",
+            "A-07",
+            "A-08",
+            "A-09"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "閲覧担当には編集操作なし",
+          "disposition": "covered",
+          "scenario_ids": [
+            "A-10"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        }
+      ]
+    },
+    {
+      "requirement_ref": "SPEC-A#R4",
+      "disposition": "covered",
+      "scenario_ids": [
+        "A-01",
+        "A-02",
+        "A-03",
+        "A-04",
+        "A-05",
+        "A-11"
+      ],
+      "question_ids": [],
+      "reason": "CSV取得を集約しても各条件の照合を維持。",
+      "conditions": [
+        {
+          "label": "1の画面反映",
+          "disposition": "covered",
+          "scenario_ids": [
+            "A-01"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "5の画面反映",
+          "disposition": "covered",
+          "scenario_ids": [
+            "A-02"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "6の画面反映",
+          "disposition": "covered",
+          "scenario_ids": [
+            "A-03"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "9の画面反映",
+          "disposition": "covered",
+          "scenario_ids": [
+            "A-04"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "10の画面反映",
+          "disposition": "covered",
+          "scenario_ids": [
+            "A-05"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        },
+        {
+          "label": "5つの保存値のCSV反映",
+          "disposition": "covered",
+          "scenario_ids": [
+            "A-11"
+          ],
+          "question_ids": [],
+          "reason": "対応する条件を個別に確認する。"
+        }
+      ]
+    }
+  ],
+  "questions": [],
+  "review": {
+    "status": "self_reviewed",
+    "limitations": [
+      "構造検査用の架空サンプル。業務上の正解や実案件での品質評価を表すものではない。"
+    ]
+  }
+}

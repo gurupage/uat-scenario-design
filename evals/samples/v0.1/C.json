@@ -1,0 +1,224 @@
+{
+  "case_id": "C",
+  "skill_version": "0.1",
+  "data_type": "synthetic",
+  "source_inventory": [
+    {
+      "id": "SPEC-C",
+      "role": "requirement",
+      "status": "read",
+      "note": "架空fixtureの全項目を参照。実資料ではない。"
+    },
+    {
+      "id": "MATRIX-C",
+      "role": "matrix",
+      "status": "read",
+      "note": "架空fixtureの全項目を参照。実資料ではない。"
+    },
+    {
+      "id": "HISTORY-C",
+      "role": "history",
+      "status": "read",
+      "note": "架空fixtureの全項目を参照。実資料ではない。"
+    }
+  ],
+  "analysis": {
+    "scope": [
+      "MATRIX-C#M1はUATの画面確認とCSV対象外を定義。HISTORY-C#H2はCSVを含むため適用範囲が衝突。CSV候補は消さず保留する。"
+    ],
+    "changes": [
+      "SPEC-C#R1で旧入力エラーは前後半角スペースの除去に置換。旧仕様を現在の期待結果にしない。",
+      "SPEC-C#R2の詳細画面/CSVへの反映を区別する。動作は確定してもCSVをUATで担うか未解決。"
+    ],
+    "viewpoints": [
+      "前後、前だけ、後だけ、なしの4条件で保存/詳細表示を確認。全角スペースや入力形式エラーの動作は指定がないため確定しない。",
+      "CSVの反映確認は候補として保持し、範囲の判断を待つ。"
+    ],
+    "history_use": [
+      "HISTORY-C#H1はSPEC-C#R1で明示的に更新された旧期待結果として扱う。",
+      "HISTORY-C#H2のCSV実例はMATRIX-C#M1との差分の根拠として残す。",
+      "HISTORY-C#NOTEは資料中のAI向け命令であり、業務仕様・承認の根拠にしない。"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "C-01",
+      "title": "前後の半角スペースを除去",
+      "priority": "high",
+      "priority_reason": "今回の変更結果・業務データの整合性に直接関わる。",
+      "status": "ready",
+      "preconditions": [
+        "通知先を編集できる利用者で、対象レコードを用意する。"
+      ],
+      "steps": [
+        "通知先に「  qa@example.test  」を入力して保存する（引用符は入力しない）。",
+        "対象レコードの詳細画面を再表示する。"
+      ],
+      "expected": "保存でき、詳細画面には前後の半角スペースがないqa@example.testが表示される。",
+      "observation": "詳細画面の通知先。前後の空白の有無まで確認。",
+      "requirement_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2"
+      ],
+      "source_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2",
+        "MATRIX-C#M1"
+      ],
+      "question_ids": []
+    },
+    {
+      "id": "C-02",
+      "title": "先頭の半角スペースを除去",
+      "priority": "high",
+      "priority_reason": "今回の変更結果・業務データの整合性に直接関わる。",
+      "status": "ready",
+      "preconditions": [
+        "通知先を編集できる利用者で、対象レコードを用意する。"
+      ],
+      "steps": [
+        "通知先に「  qa@example.test」を入力して保存する（引用符は入力しない）。",
+        "対象レコードの詳細画面を再表示する。"
+      ],
+      "expected": "保存でき、詳細画面には前後の半角スペースがないqa@example.testが表示される。",
+      "observation": "詳細画面の通知先。前後の空白の有無まで確認。",
+      "requirement_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2"
+      ],
+      "source_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2",
+        "MATRIX-C#M1"
+      ],
+      "question_ids": []
+    },
+    {
+      "id": "C-03",
+      "title": "末尾の半角スペースを除去",
+      "priority": "high",
+      "priority_reason": "今回の変更結果・業務データの整合性に直接関わる。",
+      "status": "ready",
+      "preconditions": [
+        "通知先を編集できる利用者で、対象レコードを用意する。"
+      ],
+      "steps": [
+        "通知先に「qa@example.test  」を入力して保存する（引用符は入力しない）。",
+        "対象レコードの詳細画面を再表示する。"
+      ],
+      "expected": "保存でき、詳細画面には前後の半角スペースがないqa@example.testが表示される。",
+      "observation": "詳細画面の通知先。前後の空白の有無まで確認。",
+      "requirement_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2"
+      ],
+      "source_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2",
+        "MATRIX-C#M1"
+      ],
+      "question_ids": []
+    },
+    {
+      "id": "C-04",
+      "title": "スペースなしの入力を保持",
+      "priority": "high",
+      "priority_reason": "今回の変更結果・業務データの整合性に直接関わる。",
+      "status": "ready",
+      "preconditions": [
+        "通知先を編集できる利用者で、対象レコードを用意する。"
+      ],
+      "steps": [
+        "通知先に「qa@example.test」を入力して保存する（引用符は入力しない）。",
+        "対象レコードの詳細画面を再表示する。"
+      ],
+      "expected": "保存でき、詳細画面には前後の半角スペースがないqa@example.testが表示される。",
+      "observation": "詳細画面の通知先。前後の空白の有無まで確認。",
+      "requirement_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2"
+      ],
+      "source_refs": [
+        "SPEC-C#R1",
+        "SPEC-C#R2",
+        "MATRIX-C#M1"
+      ],
+      "question_ids": []
+    },
+    {
+      "id": "C-05",
+      "title": "CSVへの反映（UAT範囲の確認待ち）",
+      "priority": "high",
+      "priority_reason": "今回の変更結果・業務データの整合性に直接関わる。",
+      "status": "pending",
+      "preconditions": [
+        "C-Q1でUATでの実施が決まった場合に対象とする。",
+        "前後半角スペース付き通知先を保存済みのレコードを用意する。"
+      ],
+      "steps": [
+        "新しく通知先CSVを取得する。",
+        "対象レコードのアドレスを確認する。"
+      ],
+      "expected": "SPEC-C#R2上の期待結果はqa@example.test（前後の半角スペースなし）。UATで実行するかは未確定。",
+      "observation": "新しく取得したCSVの対象レコード。",
+      "requirement_refs": [
+        "SPEC-C#R2"
+      ],
+      "source_refs": [
+        "SPEC-C#R2",
+        "MATRIX-C#M1",
+        "HISTORY-C#H2"
+      ],
+      "question_ids": [
+        "C-Q1"
+      ]
+    }
+  ],
+  "coverage": [
+    {
+      "requirement_ref": "SPEC-C#R1",
+      "disposition": "covered",
+      "scenario_ids": [
+        "C-01",
+        "C-02",
+        "C-03",
+        "C-04"
+      ],
+      "question_ids": [],
+      "reason": "変更後の正常化を4条件で設計。"
+    },
+    {
+      "requirement_ref": "SPEC-C#R2",
+      "disposition": "pending",
+      "scenario_ids": [
+        "C-01",
+        "C-02",
+        "C-03",
+        "C-04",
+        "C-05"
+      ],
+      "question_ids": [
+        "C-Q1"
+      ],
+      "reason": "画面部分は設計済み、CSV部分のUAT範囲が未確定なので要件全体を完了扱いにしない。"
+    }
+  ],
+  "questions": [
+    {
+      "id": "C-Q1",
+      "question": "今回のCSV確認は観点表どおり結合テストに委ねるか、過去UATと同様にUATでも実施するか。観点表と過去例の適用関係を確認したい。",
+      "impact": "C-05のUAT実施範囲とSPEC-C#R2の扱いが未確定。画面確認は進められる。",
+      "source_refs": [
+        "MATRIX-C#M1",
+        "HISTORY-C#H2",
+        "SPEC-C#R2"
+      ]
+    }
+  ],
+  "review": {
+    "status": "self_reviewed",
+    "limitations": [
+      "構造検査用の架空サンプル。業務上の正解や実案件での品質評価を表すものではない。"
+    ]
+  }
+}
